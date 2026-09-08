@@ -1,0 +1,135 @@
+{
+  "project_info": {
+    "project_number": "677858606037",
+    "firebase_url": "https://gamekadeh-18e41.firebaseio.com",
+    "project_id": "gamekadeh-18e41",
+    "storage_bucket": "gamekadeh-18e41.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:677858606037:android:ff441eec7a835c9c8b5b5c",
+        "android_client_info": {
+          "package_name": "backgammon.co.saam"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBC27qC2-lrp4eCT2RLNlPzyvYECw4x5o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "677858606037-usvn5k7n3f4i7diaj964flh3ren5535f.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "677858606037-cfao3b8n1cno1b4lhc7q2k8t404el971.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "saam.google"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:677858606037:android:333ae293aac187208b5b5c",
+        "android_client_info": {
+          "package_name": "com.havagames.battleofspeedandexplosion"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBC27qC2-lrp4eCT2RLNlPzyvYECw4x5o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "677858606037-usvn5k7n3f4i7diaj964flh3ren5535f.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "677858606037-cfao3b8n1cno1b4lhc7q2k8t404el971.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "saam.google"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:677858606037:android:8e7981e723924799",
+        "android_client_info": {
+          "package_name": "nostabazi.ir"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBC27qC2-lrp4eCT2RLNlPzyvYECw4x5o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "677858606037-usvn5k7n3f4i7diaj964flh3ren5535f.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "677858606037-cfao3b8n1cno1b4lhc7q2k8t404el971.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "saam.google"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:677858606037:android:958a7e3ba68ed7df",
+        "android_client_info": {
+          "package_name": "start.nostabazi.ir"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBC27qC2-lrp4eCT2RLNlPzyvYECw4x5o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "677858606037-usvn5k7n3f4i7diaj964flh3ren5535f.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "677858606037-cfao3b8n1cno1b4lhc7q2k8t404el971.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "saam.google"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
