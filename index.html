@@ -8,8 +8,16 @@
       content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
     >
     <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Zarrin Takhte">
+    <meta name="theme-color" content="#151216">
+    <meta name="screen-orientation" content="portrait">
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Zarrin Takhte">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="icon" sizes="192x192" href="TemplateData/icon-192.png">
+    <link rel="icon" sizes="512x512" href="TemplateData/icon-512.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="TemplateData/apple-touch-icon.png">
     <title>Zarrin Takhte</title>
     <style>
       html,
@@ -142,18 +150,45 @@
     <script>
       var canvas = document.querySelector("#unity-canvas");
       var container = document.querySelector("#unity-container");
+      var fullscreenRequested = false;
 
       function lockViewport() {
-        var width = Math.max(1, container.clientWidth);
-        var height = Math.max(1, container.clientHeight);
+        var width = Math.max(1, window.innerWidth || container.clientWidth);
+        var height = Math.max(1, window.innerHeight || container.clientHeight);
         canvas.style.width = width + "px";
         canvas.style.height = height + "px";
+        container.style.height = height + "px";
+      }
+
+      function requestFullscreenOnce() {
+        if (fullscreenRequested || window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone) {
+          return;
+        }
+
+        fullscreenRequested = true;
+        var target = document.documentElement;
+        var requestFullscreen =
+          target.requestFullscreen ||
+          target.webkitRequestFullscreen ||
+          target.msRequestFullscreen;
+
+        if (requestFullscreen) {
+          try {
+            var request = requestFullscreen.call(target);
+            if (request && request.catch) {
+              request.catch(function () {});
+            }
+          } catch (e) {}
+        }
       }
 
       window.addEventListener("resize", lockViewport);
       window.addEventListener("orientationchange", function () {
         setTimeout(lockViewport, 250);
       });
+      window.addEventListener("pageshow", lockViewport);
+      document.addEventListener("click", requestFullscreenOnce);
+      document.addEventListener("touchend", requestFullscreenOnce);
       document.addEventListener("gesturestart", function (event) {
         event.preventDefault();
       });
@@ -214,6 +249,12 @@
       };
 
       document.body.appendChild(script);
+
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", function () {
+          navigator.serviceWorker.register("sw.js").catch(function () {});
+        });
+      }
     </script>
   </body>
 </html>
