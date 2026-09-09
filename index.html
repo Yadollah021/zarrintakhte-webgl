@@ -9,8 +9,8 @@
     >
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="application-name" content="Zarrin Takhte">
-    <meta name="theme-color" content="#151216">
-    <meta name="screen-orientation" content="portrait">
+    <meta name="theme-color" content="#f2e3af">
+    <meta name="screen-orientation" content="portrait-primary">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="Zarrin Takhte">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -74,7 +74,7 @@
         height: 96px;
         margin: 0 auto 22px;
         border-radius: 24px;
-        background: #151216 url("TemplateData/app-icon.png") center / contain no-repeat;
+        background: #f2e3af url("TemplateData/app-icon.png") center / contain no-repeat;
         box-shadow: 0 14px 40px rgba(0, 0, 0, 0.35);
       }
 
@@ -160,6 +160,19 @@
         container.style.height = height + "px";
       }
 
+      function lockPortrait() {
+        if (!screen.orientation || !screen.orientation.lock) {
+          return;
+        }
+
+        try {
+          var request = screen.orientation.lock("portrait");
+          if (request && request.catch) {
+            request.catch(function () {});
+          }
+        } catch (e) {}
+      }
+
       function requestFullscreenOnce() {
         if (fullscreenRequested || window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone) {
           return;
@@ -175,16 +188,33 @@
         if (requestFullscreen) {
           try {
             var request = requestFullscreen.call(target);
-            if (request && request.catch) {
-              request.catch(function () {});
+            if (request && request.then) {
+              request.then(function () {
+                lockPortrait();
+                setTimeout(lockViewport, 120);
+              }).catch(function () {});
+            } else {
+              lockPortrait();
+              setTimeout(lockViewport, 120);
             }
           } catch (e) {}
+        } else {
+          lockPortrait();
         }
       }
 
       window.addEventListener("resize", lockViewport);
       window.addEventListener("orientationchange", function () {
+        lockPortrait();
         setTimeout(lockViewport, 250);
+      });
+      document.addEventListener("fullscreenchange", function () {
+        lockPortrait();
+        setTimeout(lockViewport, 120);
+      });
+      document.addEventListener("webkitfullscreenchange", function () {
+        lockPortrait();
+        setTimeout(lockViewport, 120);
       });
       window.addEventListener("pageshow", lockViewport);
       document.addEventListener("click", requestFullscreenOnce);
@@ -218,12 +248,12 @@
       }
 
       var buildUrl = "Build";
-      var loaderUrl = buildUrl + "/ZarinTakhte WebBuild.loader.js";
+      var loaderUrl = buildUrl + "/zarrintakhte-webgl.loader.js";
       var config = {
         arguments: [],
-        dataUrl: buildUrl + "/ZarinTakhte WebBuild.data.unityweb",
-        frameworkUrl: buildUrl + "/ZarinTakhte WebBuild.framework.js.unityweb",
-        codeUrl: buildUrl + "/ZarinTakhte WebBuild.wasm.unityweb",
+        dataUrl: buildUrl + "/zarrintakhte-webgl.data.unityweb",
+        frameworkUrl: buildUrl + "/zarrintakhte-webgl.framework.js.unityweb",
+        codeUrl: buildUrl + "/zarrintakhte-webgl.wasm.unityweb",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "saam",
         productName: "Zarrin Takhte",

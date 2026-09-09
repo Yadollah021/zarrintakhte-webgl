@@ -4,9 +4,9 @@
   "start_url": ".",
   "scope": ".",
   "display": "fullscreen",
-  "orientation": "portrait",
-  "background_color": "#151216",
-  "theme_color": "#151216",
+  "orientation": "portrait-primary",
+  "background_color": "#f2e3af",
+  "theme_color": "#f2e3af",
   "icons": [
     {
       "src": "TemplateData/icon-192.png",
