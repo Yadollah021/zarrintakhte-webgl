@@ -248,42 +248,95 @@
         updateBannerVisibility();
       }
 
+      var ztBuildVersion = "1789062612";
+      var ztCacheVersionKey = "ZT_WEBGL_BUILD_VERSION";
       var buildUrl = "Build";
-      var loaderUrl = buildUrl + "/zarrintakhte-webgl.loader.js";
+      var versionQuery = "v=" + encodeURIComponent(ztBuildVersion);
+
+      function withBuildVersion(url) {
+        return url + (url.indexOf("?") >= 0 ? "&" : "?") + versionQuery;
+      }
+
+      function clearBuildCachesIfNeeded() {
+        var previousVersion = "";
+        try {
+          previousVersion = localStorage.getItem(ztCacheVersionKey) || "";
+        } catch (e) {}
+
+        if (previousVersion === ztBuildVersion) {
+          return Promise.resolve();
+        }
+
+        var jobs = [];
+        if (window.caches && caches.keys) {
+          jobs.push(
+            caches.keys().then(function (keys) {
+              return Promise.all(keys.map(function (key) { return caches.delete(key); }));
+            }).catch(function () {})
+          );
+        }
+
+        if (navigator.serviceWorker && navigator.serviceWorker.getRegistrations) {
+          jobs.push(
+            navigator.serviceWorker.getRegistrations().then(function (registrations) {
+              return Promise.all(registrations.map(function (registration) {
+                return registration.update().catch(function () {});
+              }));
+            }).catch(function () {})
+          );
+        }
+
+        return Promise.all(jobs).then(function () {
+          try {
+            localStorage.setItem(ztCacheVersionKey, ztBuildVersion);
+          } catch (e) {}
+        });
+      }
+
+      var loaderUrl = withBuildVersion(buildUrl + "/zarrintakhte-webgl.loader.js");
       var config = {
         arguments: [],
-        dataUrl: buildUrl + "/zarrintakhte-webgl.data.unityweb",
-        frameworkUrl: buildUrl + "/zarrintakhte-webgl.framework.js.unityweb",
-        codeUrl: buildUrl + "/zarrintakhte-webgl.wasm.unityweb",
+        dataUrl: withBuildVersion(buildUrl + "/zarrintakhte-webgl.data.unityweb"),
+        frameworkUrl: withBuildVersion(buildUrl + "/zarrintakhte-webgl.framework.js.unityweb"),
+        codeUrl: withBuildVersion(buildUrl + "/zarrintakhte-webgl.wasm.unityweb"),
         streamingAssetsUrl: "StreamingAssets",
         companyName: "saam",
         productName: "Zarrin Takhte",
         productVersion: "4.0",
-        showBanner: unityShowBanner
+        showBanner: unityShowBanner,
+        cacheControl: function (url) {
+          if (/\.bundle$/.test(url) || /\.data(\.|\?|$)/.test(url) || /\.wasm(\.|\?|$)/.test(url) || /\.framework\.js(\.|\?|$)/.test(url)) {
+            return "must-revalidate";
+          }
+          return "no-store";
+        }
       };
 
       config.devicePixelRatio = Math.min(window.devicePixelRatio || 1, 2);
 
       document.querySelector("#unity-loading-bar").style.display = "block";
 
-      var script = document.createElement("script");
-      script.src = loaderUrl;
-      script.onload = function () {
-        createUnityInstance(canvas, config, function (progress) {
-          document.querySelector("#unity-progress-bar-full").style.width = 100 * progress + "%";
-        }).then(function () {
-          document.querySelector("#unity-loading-bar").style.display = "none";
-          lockViewport();
-        }).catch(function (message) {
-          alert(message);
-        });
-      };
+      function startUnity() {
+        var script = document.createElement("script");
+        script.src = loaderUrl;
+        script.onload = function () {
+          createUnityInstance(canvas, config, function (progress) {
+            document.querySelector("#unity-progress-bar-full").style.width = 100 * progress + "%";
+          }).then(function () {
+            document.querySelector("#unity-loading-bar").style.display = "none";
+            lockViewport();
+          }).catch(function (message) {
+            alert(message);
+          });
+        };
 
-      document.body.appendChild(script);
+        document.body.appendChild(script);
+      }
 
+      clearBuildCachesIfNeeded().then(startUnity).catch(startUnity);
       if ("serviceWorker" in navigator) {
         window.addEventListener("load", function () {
-          navigator.serviceWorker.register("sw.js").catch(function () {});
+          navigator.serviceWorker.register("sw.js?v=" + encodeURIComponent(ztBuildVersion)).catch(function () {});
         });
       }
     </script>
