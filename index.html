@@ -39,10 +39,11 @@
 
       #unity-container {
         position: fixed;
-        inset: 0;
-        width: 100vw;
-        height: 100dvh;
-        min-height: 100vh;
+        left: 50%;
+        top: 50%;
+        width: min(100vw, calc(100dvh * 9 / 16));
+        height: min(100dvh, calc(100vw * 16 / 9));
+        transform: translate(-50%, -50%);
         padding:
           env(safe-area-inset-top)
           env(safe-area-inset-right)
@@ -50,6 +51,8 @@
           env(safe-area-inset-left);
         box-sizing: border-box;
         background: #151216;
+        overflow: hidden;
+        box-shadow: 0 0 40px rgba(0, 0, 0, 0.45);
       }
 
       #unity-canvas {
@@ -61,7 +64,7 @@
       }
 
       #unity-loading-bar {
-        position: fixed;
+        position: absolute;
         left: 50%;
         top: 50%;
         width: min(72vw, 360px);
@@ -96,7 +99,7 @@
       }
 
       #unity-warning {
-        position: fixed;
+        position: absolute;
         left: max(12px, env(safe-area-inset-left));
         right: max(12px, env(safe-area-inset-right));
         top: max(12px, env(safe-area-inset-top));
@@ -114,7 +117,7 @@
       }
 
       #rotate-warning {
-        position: fixed;
+        position: absolute;
         inset: 0;
         z-index: 30;
         display: none;
@@ -128,7 +131,7 @@
         line-height: 1.7;
       }
 
-      @media (orientation: landscape) and (max-height: 540px) {
+      @media (orientation: landscape) and (max-height: 540px) and (pointer: coarse) {
         #rotate-warning {
           display: flex;
         }
@@ -137,7 +140,7 @@
   </head>
   <body>
     <div id="unity-container">
-      <canvas id="unity-canvas" width=960 height=600 tabindex="-1"></canvas>
+      <canvas id="unity-canvas" width=440 height=956 tabindex="-1"></canvas>
       <div id="unity-loading-bar">
         <div id="unity-logo" aria-hidden="true"></div>
         <div id="unity-progress-bar-empty">
@@ -154,11 +157,21 @@
       var fullscreenRequested = false;
 
       function lockViewport() {
-        var width = Math.max(1, window.innerWidth || container.clientWidth);
-        var height = Math.max(1, window.innerHeight || container.clientHeight);
-        canvas.style.width = width + "px";
-        canvas.style.height = height + "px";
-        container.style.height = height + "px";
+        var viewportWidth = Math.max(1, window.innerWidth || document.documentElement.clientWidth);
+        var viewportHeight = Math.max(1, window.innerHeight || document.documentElement.clientHeight);
+        var portraitAspect = 9 / 16;
+        var width = viewportWidth;
+        var height = width / portraitAspect;
+
+        if (height > viewportHeight) {
+          height = viewportHeight;
+          width = height * portraitAspect;
+        }
+
+        container.style.width = Math.floor(width) + "px";
+        container.style.height = Math.floor(height) + "px";
+        canvas.style.width = "100%";
+        canvas.style.height = "100%";
       }
 
       function lockPortrait() {
@@ -248,7 +261,7 @@
         updateBannerVisibility();
       }
 
-      var ztBuildVersion = "1789062612";
+      var ztBuildVersion = "1789135571";
       var ztCacheVersionKey = "ZT_WEBGL_BUILD_VERSION";
       var buildUrl = "Build";
       var versionQuery = "v=" + encodeURIComponent(ztBuildVersion);
