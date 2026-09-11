@@ -1,4 +1,4 @@
-const ZT_BUILD_VERSION = "1789135571";
+const ZT_BUILD_VERSION = "1789140091";
 const ZT_CACHE_NAME = "zt-webgl-" + ZT_BUILD_VERSION;
 
 self.addEventListener("install", function (event) {
